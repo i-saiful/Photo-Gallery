@@ -3,6 +3,7 @@ import Home from "./pages/Home";
 import ImageFeedback from "./pages/ImageFeedback";
 import {Provider} from 'react-redux';
 import store from "./redux/store";
+import UserForm from "./pages/UserForm";
 
 function App() {
   return (
@@ -10,6 +11,7 @@ function App() {
       {/* <Navigation /> */}
       {/* <Home /> */}
       {/* <ImageFeedback /> */}
+      <UserForm />
     </Provider>
   );
 }
