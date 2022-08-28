@@ -1,14 +1,16 @@
 import Navigation from "./components/Navigation";
 import Home from "./pages/Home";
 import ImageFeedback from "./pages/ImageFeedback";
+import {Provider} from 'react-redux';
+import store from "./redux/store";
 
 function App() {
   return (
-    <div >
-      <Navigation />
+    <Provider store={store}>
+      {/* <Navigation /> */}
       {/* <Home /> */}
-      <ImageFeedback />
-    </div>
+      {/* <ImageFeedback /> */}
+    </Provider>
   );
 }
 
