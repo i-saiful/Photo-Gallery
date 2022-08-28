@@ -11,13 +11,27 @@ export const authReducer = createSlice({
     name: 'authReducer',
     initialState,
     reducers: {
-        authSuccess: state => state,
+        authSuccess(state, action) {
+            // console.log(action);
+            // console.log(state.token);
+            return {
+                ...state,
+                token: action.payload.token,
+                userId: action.payload.userId
+                // console.log(action.payload);
+            }
+        },
         authFailed: (state, action) => ({
             ...state,
             authFailedMessage: action.payload
         }),
         authLoading: state => state,
-        authLogout: state => state
+        authLogout: state => ({
+            ...state,
+            userId: null,
+            token: null,
+            userName: ''
+        })
     }
 })
 
@@ -45,10 +59,18 @@ export const auth = (newUser, email, password) => dispatch => {
         response => response.json()
     ).then(
         async data => {
-            if(data.error) {
+            if (data.error) {
                 dispatch(authFailed(data.error.message))
             } else {
-                console.log(data);
+                const token = data.idToken;
+                const userId = data.localId;
+                const expiresIn = data.expiresIn;
+                localStorage.setItem('token', token);
+                localStorage.setItem('userId', userId);
+                // expirationTime
+                const expirationTime = new Date(new Date().getTime() + expiresIn * 1000)
+                localStorage.setItem('expirationTime', expirationTime)
+                dispatch(authSuccess({ token, userId }))
             }
         }
     ).catch(
@@ -56,5 +78,28 @@ export const auth = (newUser, email, password) => dispatch => {
     )
 }
 
-export const { authSuccess, authFailed } = authReducer.actions;
+export const authCheck = () => dispatch => {
+    const token = localStorage.getItem('token');
+    if (token) {
+        const expirationTime = new Date(localStorage.getItem('expirationTime'))
+        if (new Date <= expirationTime) {
+            const userId = localStorage.getItem('userId');
+            // console.log(expirationTime);
+            dispatch(authSuccess({ token, userId }))
+        } else {
+            logout()
+        }
+    } else {
+        logout();
+    }
+}
+
+export const logout = () => dispatch => {
+    localStorage.clear();
+
+    // console.log(localStorage.getItem('userId'));
+    dispatch(authLogout());
+}
+
+export const { authSuccess, authFailed, authLogout } = authReducer.actions;
 export default authReducer.reducer;

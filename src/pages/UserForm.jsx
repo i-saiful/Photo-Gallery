@@ -164,6 +164,8 @@ function UserForm() {
             email: errorMessage
         })
         // eslint-disable-next-line
+
+        // console.log(authReducer);
     }, [errorMessage]);
 
     return (

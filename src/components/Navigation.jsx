@@ -1,7 +1,11 @@
 import React from 'react';
 import FileUploadModal from './FileUploadModal';
+import { logout } from '../redux/authReducer';
+import { useDispatch } from 'react-redux'
 
 function Navigation() {
+    const dispatch = useDispatch();
+
     return (
         <div className='bg-light'>
             <nav className='container d-flex align-items-center jusctigy-content-center p-3'>
@@ -19,7 +23,9 @@ function Navigation() {
                 <button className='btn bg-primary bg-opacity-25 ms-4 fs-5'>
                     <i className="bi bi-upload"></i> Upload</button>
                 <div className="avatar bg-success bg-opacity-25 ms-4">M</div>
-                <div className='ms-4 fs-4 btn btn-outline-primary'>Logout</div>
+                <div className='ms-4 fs-4 btn btn-outline-primary'
+                    onClick={() => dispatch(logout())}
+                >Logout</div>
             </nav>
             {/* <FileUploadModal /> */}
         </div>
