@@ -1,4 +1,5 @@
-import React from 'react'
+import React from 'react';
+import FileUploadModal from './FileUploadModal';
 
 function Navigation() {
     return (
@@ -19,8 +20,8 @@ function Navigation() {
                     <i className="bi bi-upload"></i> Upload</button>
                 <div className="avatar bg-success bg-opacity-25 ms-4">M</div>
                 <div className='ms-4 fs-4 btn btn-outline-primary'>Logout</div>
-
             </nav>
+            {/* <FileUploadModal /> */}
         </div>
     )
 }
