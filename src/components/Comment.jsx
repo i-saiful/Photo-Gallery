@@ -3,13 +3,11 @@ import React from 'react'
 function Comment() {
     return (
         <form>
-            <div class="form-floating">
-                <textarea class="form-control"></textarea>
-                <label >Leave a comment here</label>
-            </div>
-            <div className='d-flex justify-content-between mt-3'>
-                <input className='btn btn-danger' type="button" value="close" />
-                <input className='btn btn-primary' type="submit" value="Submit"/>
+            <textarea
+                className="form-control"
+                placeholder="Leave a comment here" rows="5"></textarea>
+            <div className='mt-3 text-end'>
+                <input className='btn btn-primary btn-lg' type="submit" value="Submit" />
             </div>
         </form>
     )

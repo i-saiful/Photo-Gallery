@@ -10,7 +10,7 @@ function CommentList() {
                     <div className='text-muted '>12 Sep 2022</div>
                 </div>
             </div>
-            <div class="card-body">
+            <div className="card-body">
                 <p className='m-0'>sdfsdjflsdjflsdjfldsjfl
                     sfdsjlfjdslfsd
                     sdfsdfldsjlfds

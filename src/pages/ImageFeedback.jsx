@@ -4,10 +4,10 @@ import Comment from '../components/Comment';
 
 function ImageFeedback() {
     return (
-        <div className='mt-5'>
+        <div className='mt-5 container'>
             {/* <div> */}
                 <img src="https://github.com/mdo.png"
-                    class="card-img-top rounded" alt="name" height="400" />
+                    className="card-img-top rounded" alt="name" height="400" />
             {/* </div> */}
             {/* <hr /> */}
             <CommentList />
