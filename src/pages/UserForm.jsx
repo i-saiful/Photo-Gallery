@@ -72,6 +72,7 @@ function UserForm() {
     const validationCheck = () => {
         let flag = true;
         const { name, email, password, confirmPassword } = userInput;
+        // eslint-disable-next-line
         const regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
         const isEmail = regex.test(email)
 
@@ -162,6 +163,7 @@ function UserForm() {
             ...errorMsg,
             email: errorMessage
         })
+        // eslint-disable-next-line
     }, [errorMessage]);
 
     return (
