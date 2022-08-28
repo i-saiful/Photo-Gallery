@@ -1,6 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { auth, authFailed } from '../redux/authReducer';
+import { useSelector, useDispatch } from 'react-redux';
 
 function UserForm() {
+    const dispatch = useDispatch();
+    const errorMessage = useSelector(state => state.auth.authFailedMessage)
     const [showPassword, setShowPassword] = useState(false);
     const [newUser, setNewUser] = useState(false);
     const [validation, setValidation] = useState(false);
@@ -8,12 +12,19 @@ function UserForm() {
         name: '',
         email: '',
         password: '',
-        confirmPasswoed: ''
+        confirmPassword: ''
+    });
+    const [userInput, setUserInput] = useState({
+        name: '',
+        email: '',
+        password: '',
+        confirmPassword: ''
     })
 
     let renderName = null;
     let renderConfirPassword = null;
-    //is-invalid
+
+
     if (newUser) {
         renderName = (
             <div className="form-check mb-3 ps-0">
@@ -21,7 +32,9 @@ function UserForm() {
                     name='name'
                     className={errorMsg.name ?
                         'form-control is-invalid' : 'form-control'}
-                    placeholder='Your Full Name' />
+                    placeholder='Your Full Name'
+                    onChange={(e) => handleInputChange(e)}
+                />
 
                 <div className="invalid-feedback">
                     {errorMsg.name}
@@ -32,21 +45,131 @@ function UserForm() {
         renderConfirPassword = (
             <div className="form-check mb-3 ps-0">
                 <input type={showPassword ? 'text' : 'password'}
-                    className={errorMsg.confirmPasswoed ?
+                    name='confirmPassword'
+                    className={errorMsg.confirmPassword ?
                         'form-control is-invalid' : 'form-control'}
-                    placeholder='Confirm Password' />
+                    placeholder='Confirm Password'
+                    onChange={(e) => handleInputChange(e)}
+                />
 
                 <div className="invalid-feedback">
-                    {errorMsg.confirmPasswoed}
+                    {errorMsg.confirmPassword}
                 </div>
             </div>
         )
     }
 
+    // here onchange input 
+    const handleInputChange = (e) => {
+        setUserInput({
+            ...userInput,
+            [e.target.name]: e.target.value
+        });
+        resetValidation();
+    }
+
+    // here validation check of form
+    const validationCheck = () => {
+        let flag = true;
+        const { name, email, password, confirmPassword } = userInput;
+        const regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+        const isEmail = regex.test(email)
+
+        if (newUser) {
+            // name is not empty
+            if (!name) {
+                setErrorMsg({
+                    ...errorMsg,
+                    name: 'Please do not empty your name.'
+                })
+
+                flag &&= false;
+            }
+
+            // email validation check
+            if (!isEmail) {
+                setErrorMsg({
+                    ...errorMsg,
+                    email: 'Please provide a valid email address.'
+                })
+                flag &&= false;
+            }
+
+            // password length check
+            if (password.length < 6) {
+                setErrorMsg({
+                    ...errorMsg,
+                    password: 'minimum password length is 6 characters'
+                })
+                flag &&= false;
+            }
+
+            // match passowrd and confirm password
+            if (password !== confirmPassword) {
+                setErrorMsg({
+                    ...errorMsg,
+                    confirmPassword: "Those passwords didn't match. Try again."
+                })
+                flag &&= false;
+            }
+
+        } else {
+            if (!isEmail) {
+                setErrorMsg({
+                    ...errorMsg,
+                    email: 'Please provide a valid email address.'
+                })
+                flag &&= false;
+            }
+
+            if (password.length < 6) {
+                setErrorMsg({
+                    ...errorMsg,
+                    password: 'minimum password length is 6 characters'
+                })
+                flag &&= false;
+            }
+        }
+
+        return flag;
+    }
+
+    // here submit form
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        let isValid = validationCheck();
+        if (isValid) {
+            const { email, password } = userInput;
+            dispatch(auth(newUser, email, password))
+            dispatch(authFailed(''));
+        }
+    }
+
+    // reset validation in input field
+    const resetValidation = () => {
+        setValidation(false);
+        setErrorMsg({
+            ...errorMsg,
+            name: '',
+            email: '',
+            password: '',
+            confirmPassword: ''
+        })
+    }
+
+    useEffect(() => {
+        setErrorMsg({
+            ...errorMsg,
+            email: errorMessage
+        })
+    }, [errorMessage]);
+
     return (
         <main className='bg-form'>
             <form className={newUser && validation ?
-                'was-validated form-signin rounder' : 'form-signin rounded'}>
+                'was-validated form-signin rounder' : 'form-signin rounded'}
+                onSubmit={e => handleSubmit(e)}
+            >
                 <h1 className='font-monospace text-center mb-3'>
                     Please {newUser ? 'sign up' : 'sign in'}
                 </h1>
@@ -59,7 +182,9 @@ function UserForm() {
                         name='email'
                         className={errorMsg.email ?
                             'form-control is-invalid' : 'form-control'}
-                        placeholder='Email' />
+                        placeholder='Email'
+                        onChange={(e) => handleInputChange(e)}
+                    />
 
                     <div className="invalid-feedback">
                         {errorMsg.email}
@@ -71,7 +196,10 @@ function UserForm() {
                     <input type={showPassword ? 'text' : 'password'}
                         className={errorMsg.password ?
                             'form-control is-invalid' : 'form-control'}
-                        placeholder='Passowed' />
+                        placeholder='Password'
+                        name='password'
+                        onChange={(e) => handleInputChange(e)}
+                    />
 
                     <div className="invalid-feedback">
                         {errorMsg.password}
@@ -96,11 +224,12 @@ function UserForm() {
 
                 {/* sumbit button */}
                 <div className='d-flex justify-content-between align-items-center'>
+                    <input type="submit" value="Submit"
+                        className='btn btn-primary' />
+
                     <button className='btn bg-light'
                         onClick={e => { e.preventDefault(); setNewUser(!newUser) }}
                     >{newUser ? 'Sign in' : 'Create account'}</button>
-                    <input type="submit" value="Submit"
-                        className='btn btn-primary' />
                 </div>
             </form>
         </main>
