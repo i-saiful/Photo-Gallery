@@ -17,7 +17,7 @@ function AllPages() {
             <div>
                 <Navigation />
                 <Home />
-                <ImageFeedback />
+                {/* <ImageFeedback /> */}
             </div>
         )
     } else {

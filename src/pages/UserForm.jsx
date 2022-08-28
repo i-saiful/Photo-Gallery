@@ -159,6 +159,7 @@ function UserForm() {
     }
 
     useEffect(() => {
+        // error validation using switch case 
         setErrorMsg({
             ...errorMsg,
             email: errorMessage
