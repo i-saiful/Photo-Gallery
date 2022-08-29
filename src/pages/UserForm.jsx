@@ -139,10 +139,10 @@ function UserForm() {
     const handleSubmit = (e) => {
         e.preventDefault();
         let isValid = validationCheck();
-        
+
         if (isValid) {
-            const { email, password } = userInput;
-            dispatch(auth(newUser, email, password))
+            const { email, password, name } = userInput;
+            dispatch(auth(newUser, email, password, name))
             dispatch(authFailed(''));
         }
     }

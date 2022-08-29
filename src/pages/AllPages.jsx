@@ -33,11 +33,11 @@ class AllPages extends Component {
     componentDidMount() {
         // this.setState()
         this.props.authCheck();
-        console.log(this.props.authCheck());
+        // console.log(this.props.authCheck());
     }
 
     render() {
-        console.log(this.props.token);
+        // console.log(this.props.token);
         if (this.props.token) {
             return (
                 <div>

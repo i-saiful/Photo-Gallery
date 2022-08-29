@@ -8,6 +8,7 @@ function Navigation() {
     const dispatch = useDispatch();
     const [modal, setModal] = React.useState(false);
 
+
     return (
         <div className='bg-light'>
             <nav className='container d-flex align-items-center jusctigy-content-center p-3'>
@@ -35,7 +36,9 @@ function Navigation() {
                     onClick={() => dispatch(logout())}
                 >Logout</div>
             </nav>
-            {modal && <FileUploadModal setModal={setModal} />}
+            {modal && <FileUploadModal
+                setModal={setModal}
+            />}
         </div>
     )
 }

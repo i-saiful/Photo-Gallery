@@ -4,38 +4,42 @@ const initialState = {
     userId: null,
     token: null,
     userName: '',
-    authFailedMessage: ''
+    authFailedMessage: '',
+    loading: false
 }
 
 export const authReducer = createSlice({
     name: 'authReducer',
     initialState,
     reducers: {
-        authSuccess(state, action) {
-            // console.log(action);
-            // console.log(state.token);
-            return {
-                ...state,
-                token: action.payload.token,
-                userId: action.payload.userId
-                // console.log(action.payload);
-            }
-        },
+        authSuccess: (state, action) => ({
+            ...state,
+            token: action.payload.token,
+            userId: action.payload.userId
+        }),
         authFailed: (state, action) => ({
             ...state,
             authFailedMessage: action.payload
         }),
-        authLoading: state => state,
+        authLoading: (state, action) => ({
+            ...state,
+            loading: action.payload
+        }),
         authLogout: state => ({
             ...state,
             userId: null,
             token: null,
             userName: ''
+        }),
+        authName: (state, action) => ({
+            ...state,
+            userName: action.payload
         })
     }
 })
 
-export const auth = (newUser, email, password) => dispatch => {
+export const auth = (newUser, email, password, name) => dispatch => {
+    dispatch(authLoading(true))
     const baseUrl = 'https://identitytoolkit.googleapis.com/v1/accounts:'
     let user = ''
     const endPoint = '?key=AIzaSyDs7aKtSQz0aEgSmDaoCyWUUYNtC6mpzg8'
@@ -58,8 +62,9 @@ export const auth = (newUser, email, password) => dispatch => {
     }).then(
         response => response.json()
     ).then(
-        async data => {
+        data => {
             if (data.error) {
+                dispatch(authLoading(false))
                 dispatch(authFailed(data.error.message))
             } else {
                 const token = data.idToken;
@@ -72,11 +77,50 @@ export const auth = (newUser, email, password) => dispatch => {
                 localStorage.setItem('expirationTime', expirationTime)
                 dispatch(authSuccess({ token, userId }))
                 // console.log('auth validatio fetch');
+
+                // new user info set firebase realtime database;
+                if (newUser) {
+                    const userInfo = {
+                        userId, name
+                    }
+                    let endPoint = 'https://photo-gallery-8f403-default-rtdb.asia-southeast1.firebasedatabase.app/userInfo.json?auth=';
+                    fetch(endPoint + token, {
+                        method: "POST",
+                        body: JSON.stringify(userInfo)
+                    }).then(
+                        response => response.json()
+                    ).then(
+                        () => {
+                            dispatch(authName(name))
+                            dispatch(authLoading(false))
+                        }
+                    ).catch(
+                        error => {
+                            console.log(error)
+                            dispatch(authLoading(false))
+                        }
+
+                    )
+                }
             }
         }
     ).catch(
-        error => console.log(error)
+        error => {
+            console.log(error)
+            dispatch(authLoading(false))
+        }
     )
+}
+
+const getUserName = (userId, token) => dispatch => {
+    // console.log('call from authcheck');
+    const api = 'https://photo-gallery-8f403-default-rtdb.asia-southeast1.firebasedatabase.app/userInfo.json?auth='
+    const query = '&orderBy="userId"&equalTo="' + userId + '"';
+    fetch(api + token + query)
+        .then(response => response.json())
+        .then(data => dispatch(
+            authName(data[Object.keys(data)[0]].name))
+        )
 }
 
 export const authCheck = () => dispatch => {
@@ -88,20 +132,31 @@ export const authCheck = () => dispatch => {
             const userId = localStorage.getItem('userId');
             // console.log(expirationTime);
             dispatch(authSuccess({ token, userId }))
+
+            // console.log('authceck');
+            dispatch(getUserName(userId, token))
+
         } else {
-            logout()
+            dispatch(logout())
         }
     } else {
-        logout();
+        dispatch(logout())
     }
 }
 
 export const logout = () => dispatch => {
     localStorage.clear();
-
     // console.log(localStorage.getItem('userId'));
     dispatch(authLogout());
 }
 
-export const { authSuccess, authFailed, authLogout } = authReducer.actions;
+
+
+export const {
+    authSuccess,
+    authFailed,
+    authLogout,
+    authLoading,
+    authName
+} = authReducer.actions;
 export default authReducer.reducer;
