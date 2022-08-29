@@ -23,21 +23,11 @@ const mapDispatchToProps = dispatch => ({
 })
 
 class AllPages extends Component {
-    // const dispatch = useDispatch();
-    // const check = () => dispatch(authCheck())
-    // check();
-    // const token = useSelector(state => state.auth.token)
-    // state = {
-    //     token: null
-    // }
     componentDidMount() {
-        // this.setState()
         this.props.authCheck();
-        // console.log(this.props.authCheck());
     }
 
     render() {
-        // console.log(this.props.token);
         if (this.props.token) {
             return (
                 <div>
