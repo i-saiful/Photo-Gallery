@@ -3,17 +3,17 @@ import fileUpload from '../fetchApi/fileUpload';
 import { useSelector } from 'react-redux';
 
 function FileUploadModal({ setModal }) {
-    const fileName = React.useRef(null)
     const userName = useSelector(state => state.auth.userName)
     const token = useSelector(state => state.auth.token)
     const [fileInfo, setFileInfo] = React.useState({
-        fileTitle: '',
-        fileCategory: ''
+        imageUrl: '',
+        imageTitle: '',
+        imageCategory: ''
     })
     const [fileErrorMsg, setFileErrorMsg] = React.useState({
-        fileName: false,
-        fileTitle: false,
-        fileCategory: false
+        imageUrl: false,
+        imageTitle: false,
+        imageCategory: false
     })
 
     const handleInputChange = e => {
@@ -24,9 +24,9 @@ function FileUploadModal({ setModal }) {
 
         setFileErrorMsg({
             ...fileErrorMsg,
-            fileName: false,
-            fileTitle: false,
-            fileCategory: false
+            imageUrl: false,
+            imageTitle: false,
+            imageCategory: false
         })
     }
 
@@ -34,28 +34,38 @@ function FileUploadModal({ setModal }) {
     const fileInfoValidation = () => {
         let flag = true;
 
-        if (!fileInfo.fileTitle) {
+        if (!fileInfo.imageTitle) {
             setFileErrorMsg({
                 ...fileErrorMsg,
-                fileTitle: true
+                imageTitle: true
             })
             flag &&= false
         }
 
-        if (!fileInfo.fileCategory) {
+        if (!fileInfo.imageCategory) {
             setFileErrorMsg({
                 ...fileErrorMsg,
-                fileCategory: true
+                imageCategory: true
             })
             flag &&= false
         }
 
-        if (!fileName.current.files[0]) {
+        if (!fileInfo.imageUrl) {
             setFileErrorMsg({
                 ...fileErrorMsg,
-                fileName: true
+                imageUrl: true
             })
             flag &&= false
+        } else {
+            // url validation check
+            const regex = /^https?:\/\/(.+?)\./
+            if (!regex.test(fileInfo.imageUrl)) {
+                setFileErrorMsg({
+                    ...fileErrorMsg,
+                    imageUrl: true
+                })
+                flag &&= false
+            }
         }
 
         return flag;
@@ -66,16 +76,15 @@ function FileUploadModal({ setModal }) {
         const flag = fileInfoValidation(); // return true
         // console.log(flag);
         if (flag) {
-            console.log(fileName.current.files);
             const upFile = {
                 ...fileInfo, token,
-                fileName: fileName.current.files[0].name,
-                fileSize: fileName.current.files[0].size,
-                // file: fileName.current.files[0],
                 uploadedBy: userName,
-                date: new Date()
+                date: new Date(),
+                feedback: 0
             }
+            // console.log(upFile);
             fileUpload(upFile);
+            setModal(false)
         }
     }
 
@@ -93,21 +102,21 @@ function FileUploadModal({ setModal }) {
                         <form className=''>
                             {/* File */}
                             <div>
-                                <input type="file" name="fileName"
-                                    className={fileErrorMsg.fileName ?
+                                <input type="url" name="imageUrl"
+                                    className={fileErrorMsg.imageUrl ?
                                         'form-control is-invalid' : 'form-control'}
-                                    accept="image/*" required
-                                    ref={fileName}
+                                    placeholder='Image URL'
+                                    required onChange={(e) => handleInputChange(e)}
                                 />
                                 <div className="invalid-feedback">
-                                    Please choose a file.
+                                    Please provide a valid URL.
                                 </div>
                             </div>
 
                             {/* title */}
                             <div className='mt-3'>
-                                <input type="text" name='fileTitle'
-                                    className={fileErrorMsg.fileTitle ?
+                                <input type="text" name='imageTitle'
+                                    className={fileErrorMsg.imageTitle ?
                                         'form-control is-invalid' : 'form-control'}
                                     placeholder='Photo Title'
                                     onChange={(e) => handleInputChange(e)} />
@@ -119,10 +128,10 @@ function FileUploadModal({ setModal }) {
 
                             {/* Categories */}
                             <div className="mt-3">
-                                <select className={fileErrorMsg.fileCategory ?
+                                <select className={fileErrorMsg.imageCategory ?
                                     "form-select is-invalid" : "form-select"}
                                     required
-                                    name='fileCategory'
+                                    name='imageCategory'
                                     onChange={(e) => handleInputChange(e)} >
                                     <option value="">Open this select menu</option>
                                     <option value="Bike">Bike</option>
