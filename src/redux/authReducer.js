@@ -71,6 +71,7 @@ export const auth = (newUser, email, password) => dispatch => {
                 const expirationTime = new Date(new Date().getTime() + expiresIn * 1000)
                 localStorage.setItem('expirationTime', expirationTime)
                 dispatch(authSuccess({ token, userId }))
+                // console.log('auth validatio fetch');
             }
         }
     ).catch(
@@ -80,6 +81,7 @@ export const auth = (newUser, email, password) => dispatch => {
 
 export const authCheck = () => dispatch => {
     const token = localStorage.getItem('token');
+    // console.log(token);
     if (token) {
         const expirationTime = new Date(localStorage.getItem('expirationTime'))
         if (new Date <= expirationTime) {

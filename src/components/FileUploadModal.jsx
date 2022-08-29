@@ -1,6 +1,7 @@
 import React from 'react'
 
-function FileUploadModal() {
+function FileUploadModal(props) {
+    const {setModal} = props;
     return (
         <div className='modal d-block show'>
             <div className="modal-dialog">
@@ -24,7 +25,8 @@ function FileUploadModal() {
 
                     {/* modal footer */}
                     <div className="modal-footer">
-                        <button className='btn btn-danger'>Close</button>
+                        <button className='btn btn-danger' 
+                        onClick={() => setModal(false)}>Close</button>
                         <button className='btn btn-primary'>Upload</button>
                     </div>
                 </div>

@@ -1,32 +1,66 @@
-import React from 'react';
+import React, { Component } from 'react';
 import Navigation from "../components/Navigation";
+import Bicycle from './Bicycle';
+import Bike from './Bike';
+import Car from './Car';
 import Home from "./Home";
 import ImageFeedback from "./ImageFeedback";
 import UserForm from "./UserForm";
-import { useDispatch, useSelector } from 'react-redux'
-import { authCheck } from '../redux/authReducer'
+import { connect } from 'react-redux'
+import { authCheck } from '../redux/authReducer';
+import {
+    Routes,
+    Route,
+    Navigate,
+} from "react-router-dom";
 
-function AllPages() {
-    const dispatch = useDispatch();
-    const check = () => dispatch(authCheck())
-    check();
-    const token = useSelector(state => state.auth.token)
+const mapStateToProps = state => ({
+    token: state.auth.token
+})
 
-    if (token) {
-        return (
-            <div>
-                <Navigation />
-                <Home />
-                {/* <ImageFeedback /> */}
-            </div>
-        )
-    } else {
-        return (
-            <div>
-                <UserForm />
-            </div>
-        )
+const mapDispatchToProps = dispatch => ({
+    authCheck: () => dispatch(authCheck())
+})
+
+class AllPages extends Component {
+    // const dispatch = useDispatch();
+    // const check = () => dispatch(authCheck())
+    // check();
+    // const token = useSelector(state => state.auth.token)
+    // state = {
+    //     token: null
+    // }
+    componentDidMount() {
+        // this.setState()
+        this.props.authCheck();
+        console.log(this.props.authCheck());
+    }
+
+    render() {
+        console.log(this.props.token);
+        if (this.props.token) {
+            return (
+                <div>
+                    <Navigation />
+                    <Routes>
+                        <Route path="/" element={<Home />} />
+                        <Route path="/bike" element={<Bike />} />
+                        <Route path="/bicycle" element={<Bicycle />} />
+                        <Route path="/car" element={<Car />} />
+                        <Route path="/image-feedback" element={<ImageFeedback />} />
+                        <Route path="*" element={<Navigate to='/' replace={true} />} />
+                    </Routes>
+                </div>
+            )
+        } else {
+            return (
+                <Routes>
+                    <Route path="/login" element={<UserForm />} />
+                    <Route path="*" element={<Navigate to='/login' replace={true} />} />
+                </Routes>
+            )
+        }
     }
 }
 
-export default AllPages
+export default connect(mapStateToProps, mapDispatchToProps)(AllPages)
