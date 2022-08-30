@@ -76,6 +76,7 @@ export const auth = (newUser, email, password, name) => dispatch => {
                 const expirationTime = new Date(new Date().getTime() + expiresIn * 1000)
                 localStorage.setItem('expirationTime', expirationTime)
                 dispatch(authSuccess({ token, userId }))
+                name || dispatch(getUserName(userId, token))
                 // console.log('auth validatio fetch');
 
                 // new user info set firebase realtime database;

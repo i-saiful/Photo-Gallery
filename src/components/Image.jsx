@@ -1,5 +1,4 @@
 import React from 'react';
-import ImageFeedback from '../pages/ImageFeedback';
 import {useNavigate} from 'react-router-dom';
 
 function Image(props) {
@@ -7,8 +6,7 @@ function Image(props) {
   const navigate = useNavigate();
 
   const handleClick = (img) => {
-    // navigate('/')
-    console.log(img);
+    navigate('/image-feedback', {state: img})
   }
 
   return (

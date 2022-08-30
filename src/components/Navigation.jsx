@@ -1,12 +1,13 @@
 import React from 'react';
 import FileUploadModal from './FileUploadModal';
 import { logout } from '../redux/authReducer';
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom';
 
 function Navigation() {
     const dispatch = useDispatch();
     const [modal, setModal] = React.useState(false);
+    const userName = useSelector(state => state.auth.userName)
 
 
     return (
@@ -31,7 +32,9 @@ function Navigation() {
                     onClick={() => setModal(true)}
                 >
                     <i className="bi bi-upload"></i> Upload</button>
-                <div className="avatar bg-success bg-opacity-25 ms-4">M</div>
+                <div className="avatar bg-success bg-opacity-25 ms-4">
+                    {userName.trim().charAt(0)}
+                </div>
                 <div className='ms-4 fs-4 btn btn-outline-primary'
                     onClick={() => dispatch(logout())}
                 >Logout</div>

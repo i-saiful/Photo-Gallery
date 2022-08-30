@@ -17,6 +17,10 @@ export const imageReducer = createSlice({
         imageLoding: (state, action) => ({
             ...state,
             isImgListLoading: action.payload
+        }),
+        updateImageList: (state, action) => ({
+            ...state,
+            imgList: [...action.payload]
         })
     }
 })
@@ -29,15 +33,15 @@ export const fetchImageList = (token, category) => dispatch => {
     } else {
         query = '&orderBy="imageCategory"'
     } //imageCategory:"Bike
-    console.log(category);
+    // console.log(category);
     fetch(api + token + query)
         .then(
             response => response.json()
         ).then(
             data => {
                 const imagesList = []
-                for(let imgId in data) {
-                    imagesList.push({...data[imgId], imgId});
+                for (let imgId in data) {
+                    imagesList.push({ ...data[imgId], imgId });
                 }
                 // console.log(imagesList);
                 dispatch(imageList(imagesList))
@@ -48,5 +52,17 @@ export const fetchImageList = (token, category) => dispatch => {
 
 }
 
-export const { imageList, imageLoding } = imageReducer.actions;
+export const addImageList = (imageList, imgId) => dispatch => {
+    const newList = imageList.map((item) => {
+        if (item.imgId === imgId) {
+            const feedback = item.feedback + 1
+            return ({ ...item, feedback })
+        } else {
+            return item 
+        }
+    })
+    dispatch(updateImageList(newList));
+}
+
+export const { imageList, imageLoding, updateImageList } = imageReducer.actions;
 export default imageReducer.reducer;

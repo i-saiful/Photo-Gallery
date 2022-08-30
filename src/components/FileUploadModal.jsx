@@ -1,10 +1,14 @@
 import React from 'react';
 import fileUpload from '../fetchApi/fileUpload';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import updateImageList from '../js/updateImageList';
+import { fetchImageList } from '../redux/imageReducer'
 
 function FileUploadModal({ setModal }) {
     const userName = useSelector(state => state.auth.userName)
     const token = useSelector(state => state.auth.token)
+    const dispatch = useDispatch()
+    const imagesList = useSelector(state => state.img.imgList)
     const [fileInfo, setFileInfo] = React.useState({
         imageUrl: '',
         imageTitle: '',
@@ -84,7 +88,11 @@ function FileUploadModal({ setModal }) {
             }
             // console.log(upFile);
             fileUpload(upFile);
-            setModal(false)
+            // console.log(id);
+            setModal(false);
+            dispatch(fetchImageList(token))
+            //     const result = updateImageList(imagesList, upFile)
+            // console.log(result);
         }
     }
 

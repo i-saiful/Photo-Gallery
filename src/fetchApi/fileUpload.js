@@ -25,9 +25,7 @@ const fileUpload = (upFile) => {
     }).then(
         response => response.json()
     ).then(
-        () => {
-            console.log('upload');
-        }
+        data => data
     ).catch(
         error => {
             console.log(error)
