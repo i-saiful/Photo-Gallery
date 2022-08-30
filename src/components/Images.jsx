@@ -1,6 +1,6 @@
 import React from 'react';
 import Image from './Image';
-import {useSelector} from 'react-redux';
+import { useSelector } from 'react-redux';
 import Spinner from './Spinner';
 
 function Images(props) {
@@ -14,8 +14,9 @@ function Images(props) {
         )
     }
 
-    if(loading) {
-        return(
+    if (loading) {
+        // Spinner
+        return (
             <div className='d-flex align-items-center justify-content-center' style={{ height: '60vh' }}>
                 <Spinner />
             </div>

@@ -1,12 +1,12 @@
 import React from 'react';
-import {useNavigate} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 function Image(props) {
   const { uploadedBy, feedback, imageUrl, imageTitle } = props.img;
   const navigate = useNavigate();
 
   const handleClick = (img) => {
-    navigate('/image-feedback', {state: img})
+    navigate('/image-feedback', { state: img })
   }
 
   return (

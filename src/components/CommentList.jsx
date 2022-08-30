@@ -22,19 +22,22 @@ class CommentList extends Component {
     }
 
     render() {
+        // render comment list => commentPreview component
         const commentPreview = this.props.comments.map(
             (comment, index) =>
                 <CommentPreview key={index} comment={comment} />
         )
-        
+
         if (this.props.loading) {
-            return(
+            // Spinner
+            return (
                 <div className='d-flex align-items-center justify-content-center'
-                 style={{ height: '60vh' }}>
-                <Spinner />
+                    style={{ height: '60vh' }}>
+                    <Spinner />
                 </div>
             )
         } else {
+            // comment list
             return (
                 <>
                     {commentPreview}

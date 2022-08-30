@@ -18,6 +18,7 @@ function FileUploadModal({ setModal }) {
         imageCategory: false
     })
 
+    // on chnage input handler
     const handleInputChange = e => {
         setFileInfo({
             ...fileInfo,
@@ -36,6 +37,7 @@ function FileUploadModal({ setModal }) {
     const fileInfoValidation = () => {
         let flag = true;
 
+        // Title check not empty
         if (!fileInfo.imageTitle) {
             setFileErrorMsg({
                 ...fileErrorMsg,
@@ -44,6 +46,7 @@ function FileUploadModal({ setModal }) {
             flag &&= false
         }
 
+        // category check
         if (!fileInfo.imageCategory) {
             setFileErrorMsg({
                 ...fileErrorMsg,
@@ -52,6 +55,7 @@ function FileUploadModal({ setModal }) {
             flag &&= false
         }
 
+        // url check function
         if (!fileInfo.imageUrl) {
             setFileErrorMsg({
                 ...fileErrorMsg,
@@ -75,8 +79,8 @@ function FileUploadModal({ setModal }) {
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        const flag = fileInfoValidation(); 
-
+        const flag = fileInfoValidation();
+        // flag return True or False all input field
         if (flag) {
             const upFile = {
                 ...fileInfo, token,
@@ -84,9 +88,11 @@ function FileUploadModal({ setModal }) {
                 date: new Date(),
                 feedback: 0
             }
-
+            // upload image info => firebase
             fileUpload(upFile);
             setModal(false);
+
+            // update image list
             dispatch(fetchImageList(token))
         }
     }

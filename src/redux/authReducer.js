@@ -70,12 +70,13 @@ export const auth = (newUser, email, password, name) => dispatch => {
                 const expiresIn = data.expiresIn;
                 localStorage.setItem('token', token);
                 localStorage.setItem('userId', userId);
-                
+
                 const expirationTime = new Date(new Date().getTime() + expiresIn * 1000)
                 localStorage.setItem('expirationTime', expirationTime)
                 dispatch(authSuccess({ token, userId }))
                 name || dispatch(getUserName(userId, token))
-                
+
+                // here for new user
                 if (newUser) {
                     const userInfo = {
                         userId, name
@@ -110,7 +111,7 @@ export const auth = (newUser, email, password, name) => dispatch => {
 }
 
 const getUserName = (userId, token) => dispatch => {
-    // console.log('call from authcheck');
+    // sing in or reload => name colect from firebase
     const api = 'https://photo-gallery-8f403-default-rtdb.asia-southeast1.firebasedatabase.app/userInfo.json?auth='
     const query = '&orderBy="userId"&equalTo="' + userId + '"';
     fetch(api + token + query)
@@ -122,7 +123,7 @@ const getUserName = (userId, token) => dispatch => {
 
 export const authCheck = () => dispatch => {
     const token = localStorage.getItem('token');
-    // console.log(token);
+    // reload or token check local storage
     if (token) {
         const expirationTime = new Date(localStorage.getItem('expirationTime'))
         if (new Date <= expirationTime) {
@@ -143,7 +144,6 @@ export const authCheck = () => dispatch => {
 
 export const logout = () => dispatch => {
     localStorage.clear();
-    // console.log(localStorage.getItem('userId'));
     dispatch(authLogout());
 }
 

@@ -1,6 +1,7 @@
 import React from 'react'
 
 function CommentPreview({ comment }) {
+    // comment card
     return (
         <div className='my-3 card'>
             <div className="d-flex card-header">

@@ -44,7 +44,6 @@ export const fetchComment = (token, imgId) => dispatch => {
             console.log(error)
             dispatch(commentLoadingStatus(false));
         })
-
 }
 
 export const {

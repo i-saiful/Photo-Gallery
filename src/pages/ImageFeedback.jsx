@@ -26,7 +26,7 @@ function ImageFeedback() {
                 </div>
             </div>
             <CommentList imgId={imgId} />
-            <Comment img={{imgId, feedback}} />
+            <Comment img={{ imgId, feedback }} />
         </div>
     )
 }

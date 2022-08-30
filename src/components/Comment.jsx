@@ -13,12 +13,13 @@ function Comment({ img }) {
         e.preventDefault()
         if (comment) {
             const { imgId, feedback } = img;
-            // feedback update redux
+            // feedback update => redux store
             dispatch(addComment({
                 comment, userName,
                 date: new Date().toDateString()
             }))
-            commentUpload({ comment, imgId, feedback , userName, token });
+            // upload comment => firebase
+            commentUpload({ comment, imgId, feedback, userName, token });
             setComment('')
         }
     }
