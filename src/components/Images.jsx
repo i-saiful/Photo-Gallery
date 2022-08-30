@@ -1,8 +1,11 @@
 import React from 'react';
 import Image from './Image';
+import {useSelector} from 'react-redux';
+import Spinner from './Spinner';
 
 function Images(props) {
     const { title, imageList } = props;
+    const loading = useSelector(state => state.img.isImgListLoading)
 
     let image = null;
     if (imageList) {
@@ -11,14 +14,23 @@ function Images(props) {
         )
     }
 
-    return (
-        <main className='container'>
-            <p className='fw-bolder border-bottom border-info my-4 fs-3'>{title || 'All'} Images</p>
-            <div className='row row-cols-sm-2 row-cols-md-3 row-cols-lg-4'>
-                {image}
+    if(loading) {
+        return(
+            <div className='d-flex align-items-center justify-content-center' style={{ height: '60vh' }}>
+                <Spinner />
             </div>
-        </main>
-    )
+        )
+
+    } else {
+        return (
+            <main className='container'>
+                <p className='fw-bolder border-bottom border-info my-4 fs-3'>{title || 'All'} Images</p>
+                <div className='row row-cols-sm-2 row-cols-md-3 row-cols-lg-4'>
+                    {image}
+                </div>
+            </main>
+        )
+    }
 }
 
 export default Images

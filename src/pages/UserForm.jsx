@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { auth, authFailed } from '../redux/authReducer';
 import { useSelector, useDispatch } from 'react-redux';
+import Spinner from '../components/Spinner';
 
 function UserForm() {
     const dispatch = useDispatch();
     const errorMessage = useSelector(state => state.auth.authFailedMessage)
+    const loading = useSelector(state => state.auth.loading)
     const [showPassword, setShowPassword] = useState(false);
     const [newUser, setNewUser] = useState(false);
     const [validation, setValidation] = useState(false);
@@ -170,76 +172,84 @@ function UserForm() {
         // console.log(authReducer);
     }, [errorMessage]);
 
-    return (
-        <main className='bg-form'>
-            <form className={newUser && validation ?
-                'was-validated form-signin rounder' : 'form-signin rounded'}
-                onSubmit={e => handleSubmit(e)}
-            >
-                <h1 className='font-monospace text-center mb-3'>
-                    Please {newUser ? 'sign up' : 'sign in'}
-                </h1>
-                {/* input name */}
-                {renderName}
+    if (loading) {
+        return (
+            <div className='bg-form'>
+                <Spinner />
+            </div>
+        )
+    } else {
+        return (
+            <main className='bg-form'>
+                <form className={newUser && validation ?
+                    'was-validated form-signin rounder' : 'form-signin rounded'}
+                    onSubmit={e => handleSubmit(e)}
+                >
+                    <h1 className='font-monospace text-center mb-3'>
+                        Please {newUser ? 'sign up' : 'sign in'}
+                    </h1>
+                    {/* input name */}
+                    {renderName}
 
-                {/* input mail */}
-                <div className="form-check mb-3 ps-0">
-                    <input type="email"
-                        name='email'
-                        className={errorMsg.email ?
-                            'form-control is-invalid' : 'form-control'}
-                        placeholder='Email'
-                        onChange={(e) => handleInputChange(e)}
-                    />
+                    {/* input mail */}
+                    <div className="form-check mb-3 ps-0">
+                        <input type="email"
+                            name='email'
+                            className={errorMsg.email ?
+                                'form-control is-invalid' : 'form-control'}
+                            placeholder='Email'
+                            onChange={(e) => handleInputChange(e)}
+                        />
 
-                    <div className="invalid-feedback">
-                        {errorMsg.email}
+                        <div className="invalid-feedback">
+                            {errorMsg.email}
+                        </div>
                     </div>
-                </div>
 
-                {/* input password */}
-                <div className="form-check mb-3 ps-0">
-                    <input type={showPassword ? 'text' : 'password'}
-                        className={errorMsg.password ?
-                            'form-control is-invalid' : 'form-control'}
-                        placeholder='Password'
-                        name='password'
-                        onChange={(e) => handleInputChange(e)}
-                    />
+                    {/* input password */}
+                    <div className="form-check mb-3 ps-0">
+                        <input type={showPassword ? 'text' : 'password'}
+                            className={errorMsg.password ?
+                                'form-control is-invalid' : 'form-control'}
+                            placeholder='Password'
+                            name='password'
+                            onChange={(e) => handleInputChange(e)}
+                        />
 
-                    <div className="invalid-feedback">
-                        {errorMsg.password}
+                        <div className="invalid-feedback">
+                            {errorMsg.password}
+                        </div>
                     </div>
-                </div>
 
-                {/* confirm password */}
-                {renderConfirPassword}
+                    {/* confirm password */}
+                    {renderConfirPassword}
 
-                {/* checkbox password */}
-                <div className="form-check mb-5">
-                    <input className="form-check-input"
-                        type="checkbox"
-                        id='showPassword'
-                        onChange={() => setShowPassword(!showPassword)} />
+                    {/* checkbox password */}
+                    <div className="form-check mb-5">
+                        <input className="form-check-input"
+                            type="checkbox"
+                            id='showPassword'
+                            onChange={() => setShowPassword(!showPassword)} />
 
-                    <label className="form-check-label"
-                        htmlFor='showPassword' >
-                        Show Password
-                    </label>
-                </div>
+                        <label className="form-check-label"
+                            htmlFor='showPassword' >
+                            Show Password
+                        </label>
+                    </div>
 
-                {/* sumbit button */}
-                <div className='d-flex justify-content-between align-items-center'>
-                    <input type="submit" value="Submit"
-                        className='btn btn-primary' />
+                    {/* sumbit button */}
+                    <div className='d-flex justify-content-between align-items-center'>
+                        <input type="submit" value="Submit"
+                            className='btn btn-primary' />
 
-                    <button className='btn bg-light'
-                        onClick={e => { e.preventDefault(); setNewUser(!newUser) }}
-                    >{newUser ? 'Sign in' : 'Create account'}</button>
-                </div>
-            </form>
-        </main>
-    )
+                        <button className='btn bg-light'
+                            onClick={e => { e.preventDefault(); setNewUser(!newUser) }}
+                        >{newUser ? 'Sign in' : 'Create account'}</button>
+                    </div>
+                </form>
+            </main>
+        )
+    }
 }
 
 export default UserForm

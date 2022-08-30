@@ -27,9 +27,9 @@ export const imageReducer = createSlice({
 })
 
 export const fetchImageList = (token, category) => dispatch => {
+    dispatch(imageLoding(true))
     const api = 'https://photo-gallery-8f403-default-rtdb.asia-southeast1.firebasedatabase.app/imagesList.json?auth='
     let query = '';
-    console.log(category);
     if (category) {
         query = '&orderBy="imageCategory"&equalTo="' + category + '"';
     } else {
@@ -47,9 +47,12 @@ export const fetchImageList = (token, category) => dispatch => {
                 }
                 // console.log(imagesList);
                 dispatch(imageList(imagesList))
+                dispatch(imageLoding(false))
             }
-        ).catch(
-            error => console.log(error)
+        ).catch(error => {
+                console.log(error)
+            dispatch(imageLoding(false))
+        }
         )
 
 }

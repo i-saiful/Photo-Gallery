@@ -38,10 +38,13 @@ export const fetchComment = (token, imgId) => dispatch => {
                 list.push(data[comment]);
             }
             dispatch(commentListUpdate(list))
+            dispatch(commentLoadingStatus(false));
         })
-        .catch(error => console.log(error))
+        .catch(error => {
+            console.log(error)
+            dispatch(commentLoadingStatus(false));
+        })
 
-    dispatch(commentLoadingStatus(false));
 }
 
 

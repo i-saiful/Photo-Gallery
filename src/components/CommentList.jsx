@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { fetchComment } from '../redux/commentReducer';
 import CommentPreview from './CommentPreview';
+import Spinner from './Spinner';
 
 
 const mapDispatchToProps = dispatch => ({
@@ -10,7 +11,8 @@ const mapDispatchToProps = dispatch => ({
 
 const mapStateToProps = state => ({
     token: state.auth.token,
-    comments: state.comment.commentList
+    comments: state.comment.commentList,
+    loading: state.comment.commentLoading
 })
 
 class CommentList extends Component {
@@ -25,12 +27,22 @@ class CommentList extends Component {
             (comment, index) =>
                 <CommentPreview key={index} comment={comment} />
         )
+        console.log(this.props.loading);
+        if (this.props.loading) {
+            return(
+                <div className='d-flex align-items-center justify-content-center'
+                 style={{ height: '60vh' }}>
+                <Spinner />
+                </div>
+            )
+        } else {
 
-        return (
-            <>
-                {commentPreview}
-            </>
-        )
+            return (
+                <>
+                    {commentPreview}
+                </>
+            )
+        }
 
         // console.log(this.props.comments);
         // this.props.comments.map(comment => console.log(comment))
