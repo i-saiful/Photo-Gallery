@@ -163,10 +163,35 @@ function UserForm() {
 
     useEffect(() => {
         // error validation using switch case 
-        setErrorMsg({
-            ...errorMsg,
-            email: errorMessage
-        })
+        switch (errorMessage) {
+            case 'EMAIL_EXISTS':
+                setErrorMsg({
+                    ...errorMsg,
+                    email: 'The email address is already in use by another account.'
+                })
+                break;
+
+            case 'EMAIL_NOT_FOUND':
+                setErrorMsg({
+                    ...errorMsg,
+                    email: 'Email not found.'
+                })
+                break;
+
+            case 'INVALID_PASSWORD':
+                setErrorMsg({
+                    ...errorMsg,
+                    password: 'The password is invalid or the user does not have a password.'
+                })
+                break;
+
+            default:
+                setErrorMsg({
+                    ...errorMsg,
+                    email: errorMessage
+                })
+                break;
+        }
         // eslint-disable-next-line
 
         // console.log(authReducer);
