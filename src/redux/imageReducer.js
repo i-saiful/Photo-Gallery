@@ -20,7 +20,8 @@ export const imageReducer = createSlice({
         }),
         updateImageList: (state, action) => ({
             ...state,
-            imgList: [...action.payload]
+            imgList: action.payload
+            // console.log(action.payload);
         })
     }
 })
@@ -28,6 +29,7 @@ export const imageReducer = createSlice({
 export const fetchImageList = (token, category) => dispatch => {
     const api = 'https://photo-gallery-8f403-default-rtdb.asia-southeast1.firebasedatabase.app/imagesList.json?auth='
     let query = '';
+    console.log(category);
     if (category) {
         query = '&orderBy="imageCategory"&equalTo="' + category + '"';
     } else {
