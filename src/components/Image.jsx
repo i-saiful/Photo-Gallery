@@ -10,7 +10,7 @@ function Image(props) {
   }
 
   return (
-    <div className='p-1'>
+    <div className='p-1' >
       <div className='card' onClick={() => handleClick(props.img)}>
         <img src={imageUrl} className="card-img-top" alt={imageTitle}></img>
         <div className="card-footer">

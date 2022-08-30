@@ -1,5 +1,4 @@
 const commentUpload = (info) => {
-    // console.log(info);
     const {
         comment,
         feedback,

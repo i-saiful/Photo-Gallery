@@ -12,16 +12,10 @@ export const imageReducer = createSlice({
         imageList: (state, action) => ({
             ...state,
             imgList: [...action.payload]
-            // console.log(typeof action.payload);
         }),
         imageLoding: (state, action) => ({
             ...state,
             isImgListLoading: action.payload
-        }),
-        updateImageList: (state, action) => ({
-            ...state,
-            imgList: action.payload
-            // console.log(action.payload);
         })
     }
 })
@@ -57,17 +51,5 @@ export const fetchImageList = (token, category) => dispatch => {
 
 }
 
-export const addImageList = (imageList, imgId) => dispatch => {
-    const newList = imageList.map((item) => {
-        if (item.imgId === imgId) {
-            const feedback = item.feedback + 1
-            return ({ ...item, feedback })
-        } else {
-            return item 
-        }
-    })
-    dispatch(updateImageList(newList));
-}
-
-export const { imageList, imageLoding, updateImageList } = imageReducer.actions;
+export const { imageList, imageLoding } = imageReducer.actions;
 export default imageReducer.reducer;

@@ -47,6 +47,9 @@ export const fetchComment = (token, imgId) => dispatch => {
 
 }
 
-
-export const { commentListUpdate, commentLoadingStatus, addComment } = commentReducer.actions;
+export const {
+    commentListUpdate,
+    commentLoadingStatus,
+    addComment
+} = commentReducer.actions;
 export default commentReducer.reducer;

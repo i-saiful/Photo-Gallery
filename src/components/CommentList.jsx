@@ -18,7 +18,6 @@ const mapStateToProps = state => ({
 class CommentList extends Component {
 
     componentDidMount() {
-        // console.log(this.props);
         this.props.fetchComment(this.props.token, this.props.imgId);
     }
 
@@ -27,7 +26,7 @@ class CommentList extends Component {
             (comment, index) =>
                 <CommentPreview key={index} comment={comment} />
         )
-        console.log(this.props.loading);
+        
         if (this.props.loading) {
             return(
                 <div className='d-flex align-items-center justify-content-center'
@@ -36,26 +35,12 @@ class CommentList extends Component {
                 </div>
             )
         } else {
-
             return (
                 <>
                     {commentPreview}
                 </>
             )
         }
-
-        // console.log(this.props.comments);
-        // this.props.comments.map(comment => console.log(comment))
-        // const { comments } = this.props.comments
-        // if (comments) {
-        //     comments.map(comment => console.log(comment))
-        //     console.log('fhfgh');
-        // }
-        // return (
-        //     <>
-        //         <CommentPreview />
-        //     </>
-        // )
     }
 }
 

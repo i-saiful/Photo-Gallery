@@ -54,8 +54,6 @@ export const auth = (newUser, email, password, name) => dispatch => {
         returnSecureToken: true
     }
 
-    // console.log("reducer => ", email, password);
-    // expiresIn, idToken, localId
     fetch(baseUrl + user + endPoint, {
         method: 'POST',
         body: JSON.stringify(authData)
@@ -72,14 +70,12 @@ export const auth = (newUser, email, password, name) => dispatch => {
                 const expiresIn = data.expiresIn;
                 localStorage.setItem('token', token);
                 localStorage.setItem('userId', userId);
-                // expirationTime
+                
                 const expirationTime = new Date(new Date().getTime() + expiresIn * 1000)
                 localStorage.setItem('expirationTime', expirationTime)
                 dispatch(authSuccess({ token, userId }))
                 name || dispatch(getUserName(userId, token))
-                // console.log('auth validatio fetch');
-
-                // new user info set firebase realtime database;
+                
                 if (newUser) {
                     const userInfo = {
                         userId, name
